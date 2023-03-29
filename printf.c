@@ -10,35 +10,41 @@ int _printf(const char *format, ...)
 
 	var_start(args, format);
 
-	while (*format)
+	while (format && format[i])
 	{
-		if (*format == '%')
+		if (format[i] == '%')
 		{
-			format++;
+			i++;
 			switch (*format)
 			{
 				case 'c':
-					num_printed += printf("%c", va_arg(args, int));
+					buffer[printed_chars++] = (char) va_arg(args, int);
 					break;
 				case 's':
-					num_printed += printf("%s", va_arg(args, char *));
+					printed_chars += sprintf(&buffer[printed_chars], "%s", va_arg(args, char *));
 					break;
-				case %:
-					num_printed += putchar('%');
+				case '%':
+					buffer[printed_chars++] = '%';
+					break;
+				case 'd':
+				case 'i':
+					num = va_arg(args, int);
+					printed_chars += sprintf(&buffer[printed_chars], "%d", num);
 					break;
 				default:
-					putchar(*format);
-					num_printed++;
+					buffer[printed_chars++] = '%';
+					if (format[i] != '\0')
+						buffer[printed_chars++] = format[i];
 					break;
 			}
 		}
 			else
 			{
-				putchar(*format);
-				num_printed++;
+				buffer[printed_chars++] = format[i];
 			}
-			format++;
+			i++;
 	}
 		va_end(args);
-		return (num_printed);
+		fwrite(buffer, 1, printed_chars, stdout);
+		return (printed_chars);
 }
