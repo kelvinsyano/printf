@@ -11,12 +11,14 @@ int _printf(const char *format, ...)
 	char buffer[1024];
 	int i, num;
 	unsigned int binary_num;
+	unsigned int uint_num;
 
 	var_start(args, format);
 	printed_chars = 0;
 	binary_num = 0;
 	i = 0;
 	num = 0;
+	uint_num = 0;
 
 	while (format && format[i])
 	{
@@ -38,6 +40,22 @@ int _printf(const char *format, ...)
 				case 'i':
 					num = va_arg(args, int);
 					printed_chars += sprintf(&buffer[printed_chars], "%d", num);
+					break;
+				case 'u':
+					uint_num = va_arg(args, unsigned int);
+					printed_chars += sprintf(&buffer[printed_chars], "%u", uint_num);
+					break;
+				case 'x':
+					uint_num = va_arg(args, unsigned int);
+					printed_chars += sprintf(&buffer[printed_chars], "%x", uint_num);
+					break;
+				case 'X':
+					uint_num = va_arg(args, unsigned int);
+					printed_chars += sprintf(&buffer[printed_chars], "%X", uint_num);
+					break;
+				case 'o':
+					uint_num = va_arg(args, unsigned int);
+					printed_chars += sprintf(&buffer[printed_chars], "%o", uint_num);
 					break;
 				case 'b':
 					binary_num = va_arg(args, unsigned int);
