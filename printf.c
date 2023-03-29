@@ -72,10 +72,15 @@ int _printf(const char *format, ...)
 			{
 				buffer[printed_chars++] = format[i];
 			}
+			if (printed_chars == 1024)
+			{
+				write(1, buffer, printed_chars);
+				printed_chars = 0;
+			}
 			i++;
 	}
 		va_end(args);
-		fwrite(buffer, 1, printed_chars, stdout);
+		write(1, buffer, printed_chars);
 		return (printed_chars);
 }
 /**
